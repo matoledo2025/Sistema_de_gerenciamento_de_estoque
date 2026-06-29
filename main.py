@@ -421,7 +421,7 @@ janela.protocol(
 # Rodapé
 rodape = ctk.CTkLabel(
     frame,
-    text="Sistema de Controle de Estoque - Python | SQLite | CustomTkinter - V. 1.0"
+    text="Sistema de Controle de Estoque - Python | SQLite | CustomTkinter - V. 1.0",
     font=("Arial", 12)
 )
 

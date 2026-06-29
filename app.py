@@ -1,5 +1,5 @@
 # ==========================================================
-# SISTEMA DE GERENCIAMENTO DE ESTOQUE
+# SISTEMA DE GERENCIAMENTOE DE ESTOQUE
 # Desenvolvido em Python + CustomTkinter + SQLite
 # Desenvolvedor: Marco Antonio de Toledo Cardia - RA 85397
 # ==========================================================
