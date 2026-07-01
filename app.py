@@ -356,14 +356,14 @@ def abrir_cadastro():
 def abrir_lista_usuarios():
     janela = ctk.CTkToplevel(app)
     janela.title("Lista de Usuários")
-    janela.geometry("500x600")
+    janela.geometry("500x550")
     janela.resizable(False, False)
     janela.grab_set()
 
     frame = ctk.CTkFrame(
         janela,
         width=460,
-        height=560,
+        height=500,
         corner_radius=12,
         border_width=1,
         border_color="white"
@@ -458,23 +458,46 @@ def abrir_lista_usuarios():
         command=excluir
     ).pack(pady=10)
 
-    ctk.CTkButton(
+    texto_fechar = ctk.CTkLabel(
         frame, 
         text="Fechar", 
-        command=janela.destroy
-        ).pack(pady=10)
-    
+        font=("Arial", 13, "underline"),  
+        text_color="#A0A0A0"             
+    )
+    texto_fechar.pack(pady=15)
 
+    texto_fechar.bind(
+        "<Button-1>", 
+        lambda event: 
+            janela.destroy()
+            )
+
+    texto_fechar.bind(
+        "<Enter>", 
+        lambda event: 
+            texto_fechar.configure(
+                cursor="hand2", 
+                text_color="white")
+            )
+ 
+    texto_fechar.bind(
+        "<Leave>", 
+        lambda event: 
+            texto_fechar.configure(
+                cursor="", 
+                text_color="#A0A0A0")
+            )
+    
 # Layout Principal de Login
 app = ctk.CTk()
 app.title("Sistema de Gerenciamento")
-app.geometry("420x480") 
+app.geometry("420x490")  
 app.resizable(False, False)
 
 frame_login = ctk.CTkFrame(
     master=app,
     width=340,
-    height=420, 
+    height=430,  
     corner_radius=12,
     border_width=1,
     border_color="white"
@@ -482,30 +505,29 @@ frame_login = ctk.CTkFrame(
 frame_login.pack(pady=30)
 frame_login.pack_propagate(False)
 
+# FIX: Parêntese corrigido no final do pack
 ctk.CTkLabel(
     frame_login, 
     text="Sistema de Login", 
-    font=("Arial",22,"bold")
-    ).pack(pady=(25,20)
-)
+    font=("Arial", 22, "bold")
+).pack(pady=(25, 20))
 
 ctk.CTkLabel(
     frame_login, 
     text="Usuário"
-    ).pack()
+).pack()
 
 campo_usuario = ctk.CTkEntry(
     frame_login, 
     width=250, 
     placeholder_text="Digite seu usuário"
 )
-
-campo_usuario.pack(pady=(5,15))
+campo_usuario.pack(pady=(5, 15))
 
 ctk.CTkLabel(
     frame_login, 
     text="Senha"
-    ).pack()
+).pack()
 
 campo_senha = ctk.CTkEntry(
     frame_login, 
@@ -513,14 +535,14 @@ campo_senha = ctk.CTkEntry(
     width=250, 
     placeholder_text="Digite sua senha"
 )
-campo_senha.pack(pady=(5,20))
+campo_senha.pack(pady=(5, 20))
 
 ctk.CTkButton(
     frame_login, 
     text="Login", 
     width=200, 
     command=validar_login
-    ).pack()
+).pack()
 
 ctk.CTkButton(
     frame_login,
@@ -533,12 +555,43 @@ ctk.CTkButton(
     corner_radius=8
 ).pack(pady=12)
 
+texto_fechar = ctk.CTkLabel(
+    frame_login,
+    text="Fechar", 
+    font=("Arial", 13, "underline"), 
+    text_color="#A0A0A0"             
+)
+ 
+texto_fechar.pack(pady=10)
+
+texto_fechar.bind(
+    "<Button-1>", 
+    lambda event: 
+        app.destroy()
+        )
+
+texto_fechar.bind(
+    "<Enter>", 
+    lambda event: 
+        texto_fechar.configure(
+            cursor="hand2", 
+            text_color="white")
+        )
+
+texto_fechar.bind(
+    "<Leave>", 
+    lambda event: 
+        texto_fechar.configure(
+            cursor="", 
+            text_color="#A0A0A0")
+        )
+
 # Texto de ajuda informativo para o primeiro acesso
 ctk.CTkLabel(
     frame_login, 
     text="No primeiro acesso, use a Senha Master!", 
     font=("Arial", 11, "italic"),
-    text_color="gray"
+    text_color="white"
 ).pack(pady=5)
 
 resultado_login = ctk.CTkLabel(
