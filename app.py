@@ -81,21 +81,59 @@ def validar_login():
 def validar_administrador():
     janela = ctk.CTkToplevel(app)
     janela.title("Autenticação do Administrador")
-    janela.geometry("350x350")
+    janela.geometry("380x400")  
     janela.resizable(False, False)
     janela.grab_set()
     
-    ctk.CTkLabel(janela, text="Administrador", font=("Arial",20,"bold")).pack(pady=25)
-    ctk.CTkLabel(janela, text="Usuário").pack()
-
-    usuario_admin = ctk.CTkEntry(janela, width=220)
+    frame = ctk.CTkFrame(
+        janela,
+        width=320,              
+        height=340,            
+        corner_radius=12,
+        border_width=1,
+        border_color="white"
+    )
+    frame.pack(pady=30)
+    frame.pack_propagate(False)
+    
+    
+    ctk.CTkLabel(
+        frame, 
+        text="Administrador", 
+        font=("Arial", 20, "bold")
+        ).pack(pady=(25, 15)
+               
+    )
+        
+    ctk.CTkLabel(
+        frame, 
+        text="Usuário"
+        ).pack(pady=(5, 0)
+    )
+        
+    usuario_admin = ctk.CTkEntry(
+        frame, 
+        width=220, 
+        placeholder_text="Digite o usuário admin"
+    )
+    
     usuario_admin.pack(pady=5)
 
-    ctk.CTkLabel(janela, text="Senha").pack()
-    senha_admin = ctk.CTkEntry(janela, show="*", width=220)
+    ctk.CTkLabel(
+        frame, 
+        text="Senha"
+        ).pack(pady=(5, 0)
+    )
+        
+    senha_admin = ctk.CTkEntry(
+        frame, 
+        show="*", 
+        width=220, 
+        placeholder_text="Digite a senha admin"
+    )
+    
     senha_admin.pack(pady=5)
-      
-
+    
     def verificar():
         usuario = usuario_admin.get().strip()
         senha = senha_admin.get().strip()
@@ -115,8 +153,72 @@ def validar_administrador():
                 "Somente administradores podem cadastrar usuários."
             )
 
-    ctk.CTkButton(janela, text="Entrar", command=verificar).pack(pady=20)
+  
+    ctk.CTkButton(
+        frame, 
+        text="Entrar", 
+        width=180, 
+        command=verificar,
+        fg_color="#2e7d32",         
+        hover_color="#63eb72",     
+        text_color="white"          
+    ).pack(pady=25)
+    
+    texto_fechar = ctk.CTkLabel(
+        frame, 
+        text="Fechar", 
+        font=("Arial", 13, "underline"),  
+        text_color="#A0A0A0"             
+    )
+    texto_fechar.pack(pady=10)
+    
+    texto_fechar.bind(
+        "<Button-1>", 
+        lambda event: 
+            janela.destroy()
+            )
 
+    texto_fechar.bind(
+         "<Enter>", 
+         lambda event: 
+             texto_fechar.configure(
+                 cursor="hand2", 
+                 text_color="white")
+             )
+
+    texto_fechar.bind(
+        "<Leave>", 
+        lambda event: 
+            texto_fechar.configure(
+                cursor="", 
+                text_color="#A0A0A0")
+            )
+    
+      
+    def verificar():
+        usuario = usuario_admin.get().strip()
+        senha = senha_admin.get().strip()
+
+        cursor.execute("""
+            SELECT perfil FROM usuarios WHERE usuario=? AND senha=?
+        """, (usuario, senha))
+        
+        resultado = cursor.fetchone()
+
+        if resultado and resultado[0] == "Administrador":
+            janela.destroy()
+            abrir_cadastro()
+        else:
+            messagebox.showerror(
+                "Acesso negado",
+                "Somente administradores podem cadastrar usuários."
+            )
+
+    ctk.CTkButton(
+        janela, 
+        text="Entrar", 
+        command=verificar
+        ).pack(pady=20)
 
 # Layout de cadastro de usuários
 def abrir_cadastro():
@@ -137,17 +239,45 @@ def abrir_cadastro():
     frame.pack(pady=20)
     frame.pack_propagate(False)
 
-    ctk.CTkLabel(frame, text="Cadastro de Usuário", font=("Arial",22,"bold")).pack(pady=15)
+    ctk.CTkLabel(
+        frame, 
+        text="Cadastro de Usuário",
+        font=("Arial",22,"bold")
+        ).pack(pady=15)
     
-    ctk.CTkLabel(frame, text="Usuário").pack()
-    campo_novo_usuario = ctk.CTkEntry(frame, width=250, placeholder_text="Digite o usuário")
+    ctk.CTkLabel(
+        frame, 
+        text="Usuário"
+        ).pack()
+    
+    campo_novo_usuario = ctk.CTkEntry(
+        frame,
+        width=250, 
+        placeholder_text="Digite o usuário"
+        )
+    
     campo_novo_usuario.pack(pady=5)
 
-    ctk.CTkLabel(frame, text="Senha").pack()
-    campo_nova_senha = ctk.CTkEntry(frame, width=250, show="*", placeholder_text="Digite a senha")
+    ctk.CTkLabel(
+        frame, 
+        text="Senha"
+        ).pack()
+    
+    campo_nova_senha = ctk.CTkEntry(
+        frame, 
+        width=250, 
+        show="*", 
+        placeholder_text="Digite a senha"
+        )
+    
     campo_nova_senha.pack(pady=5)
     
-    ctk.CTkLabel(frame, text="Perfil").pack(pady=(5,0))
+    ctk.CTkLabel(
+        frame, 
+        text="Perfil"
+        ).pack(pady=(5,0)
+    )
+        
     perfil = ctk.StringVar(value="Funcionario")
     
     ctk.CTkOptionMenu(
@@ -178,8 +308,49 @@ def abrir_cadastro():
         except sqlite3.IntegrityError:
             messagebox.showerror("Erro", "Este usuário já está cadastrado!")
 
-    ctk.CTkButton(frame, text="Cadastrar", width=180, command=cadastrar).pack(pady=5)
-    ctk.CTkButton(frame, text="Listar Usuários", width=180, command=abrir_lista_usuarios).pack(pady=5)
+    ctk.CTkButton(
+        frame, 
+        text="Cadastrar", 
+        width=180, 
+        command=cadastrar
+        ).pack(pady=5)
+    
+    ctk.CTkButton(
+        frame, 
+        text="Listar Usuários", 
+        width=180, 
+        command=abrir_lista_usuarios
+        ).pack(pady=5)
+    
+    texto_fechar = ctk.CTkLabel(
+        frame, 
+        text="Fechar", 
+        font=("Arial", 13, "underline"), 
+        text_color="#A0A0A0"            
+    )
+    
+    texto_fechar.pack(pady=10)
+
+    texto_fechar.bind(
+        "<Button-1>", 
+        lambda event: janela.destroy()
+    )
+    
+    texto_fechar.bind(
+        "<Enter>", 
+        lambda event: 
+            texto_fechar.configure(
+            cursor="hand2", 
+            text_color="white")
+    )
+    
+    texto_fechar.bind(
+        "<Leave>", 
+        lambda event: 
+            texto_fechar.configure(
+                cursor="", 
+                text_color="#A0A0A0")
+    )
 
 # Layout de listagem de usuários cadastrados
 def abrir_lista_usuarios():
@@ -200,16 +371,29 @@ def abrir_lista_usuarios():
     frame.pack(pady=20)
     frame.pack_propagate(False)
 
-    ctk.CTkLabel(frame, text="Lista de Usuários", font=("Arial",22,"bold")).pack(pady=15)
+    ctk.CTkLabel(
+        frame, 
+        text="Lista de Usuários", 
+        font=("Arial",22,"bold")
+        ).pack(pady=15)
 
-    scroll_frame = ctk.CTkScrollableFrame(frame, width=420, height=200)
+    scroll_frame = ctk.CTkScrollableFrame(
+        frame, 
+        width=420, 
+        height=200
+    )
+    
     scroll_frame.pack(pady=10)
 
     cursor.execute("SELECT id, usuario, perfil FROM usuarios ORDER BY usuario")
     usuarios = cursor.fetchall()
 
     if not usuarios:
-        ctk.CTkLabel(scroll_frame, text="Nenhum usuário cadastrado.").pack()
+        ctk.CTkLabel(
+            scroll_frame, 
+            text="Nenhum usuário cadastrado."
+            ).pack()
+        
     else:
         for usuario in usuarios:
             ctk.CTkLabel(
@@ -217,8 +401,17 @@ def abrir_lista_usuarios():
                 text=f"ID: {usuario[0]} | Usuário: {usuario[1]} | Perfil: {usuario[2]}"
             ).pack(anchor="w", padx=15, pady=2)
             
-    ctk.CTkLabel(frame, text="Informe o ID do usuário para excluir").pack(pady=(10, 0))
-    campo_id = ctk.CTkEntry(frame, width=150)
+    ctk.CTkLabel(
+        frame, 
+        text="Informe o ID do usuário para excluir"
+        ).pack(pady=(10, 0)
+    )
+        
+    campo_id = ctk.CTkEntry(
+        frame, 
+        width=150
+    )
+    
     campo_id.pack(pady=5)
 
     def excluir():
@@ -260,17 +453,19 @@ def abrir_lista_usuarios():
     ctk.CTkButton(
         frame,
         text="Excluir",
-        fg_color="#C62828",
-        hover_color="#B71C1C",
+        fg_color="#B71C1C",
+        hover_color="#63eb72",
         command=excluir
     ).pack(pady=10)
 
-    ctk.CTkButton(frame, text="Fechar", command=janela.destroy).pack(pady=10)
+    ctk.CTkButton(
+        frame, 
+        text="Fechar", 
+        command=janela.destroy
+        ).pack(pady=10)
     
-# ==========================================================
-# JANELA PRINCIPAL (LOGIN)
-# ==========================================================
 
+# Layout Principal de Login
 app = ctk.CTk()
 app.title("Sistema de Gerenciamento")
 app.geometry("420x480") 
@@ -287,17 +482,45 @@ frame_login = ctk.CTkFrame(
 frame_login.pack(pady=30)
 frame_login.pack_propagate(False)
 
-ctk.CTkLabel(frame_login, text="Sistema de Login", font=("Arial",22,"bold")).pack(pady=(25,20))
+ctk.CTkLabel(
+    frame_login, 
+    text="Sistema de Login", 
+    font=("Arial",22,"bold")
+    ).pack(pady=(25,20)
+)
 
-ctk.CTkLabel(frame_login, text="Usuário").pack()
-campo_usuario = ctk.CTkEntry(frame_login, width=250, placeholder_text="Digite seu usuário")
+ctk.CTkLabel(
+    frame_login, 
+    text="Usuário"
+    ).pack()
+
+campo_usuario = ctk.CTkEntry(
+    frame_login, 
+    width=250, 
+    placeholder_text="Digite seu usuário"
+)
+
 campo_usuario.pack(pady=(5,15))
 
-ctk.CTkLabel(frame_login, text="Senha").pack()
-campo_senha = ctk.CTkEntry(frame_login, show="*", width=250, placeholder_text="Digite sua senha")
+ctk.CTkLabel(
+    frame_login, 
+    text="Senha"
+    ).pack()
+
+campo_senha = ctk.CTkEntry(
+    frame_login, 
+    show="*", 
+    width=250, 
+    placeholder_text="Digite sua senha"
+)
 campo_senha.pack(pady=(5,20))
 
-ctk.CTkButton(frame_login, text="Login", width=200, command=validar_login).pack()
+ctk.CTkButton(
+    frame_login, 
+    text="Login", 
+    width=200, 
+    command=validar_login
+    ).pack()
 
 ctk.CTkButton(
     frame_login,
@@ -318,7 +541,12 @@ ctk.CTkLabel(
     text_color="gray"
 ).pack(pady=5)
 
-resultado_login = ctk.CTkLabel(frame_login, text="", font=("Arial",14))
+resultado_login = ctk.CTkLabel(
+    frame_login, 
+    text="", 
+    font=("Arial",14)
+)
+
 resultado_login.pack(pady=5)
 
 app.mainloop()
